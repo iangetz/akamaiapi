@@ -1,0 +1,10 @@
+*~
+*#
+
+# Binaries (if you ever build one here)
+akamaiapi
+
+# Build & test outputs
+*.exe
+*.out
+*.test
