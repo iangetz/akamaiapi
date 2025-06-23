@@ -28,7 +28,7 @@ import (
 
 // Define your response structs matching the response format of the applicable Akamai {OPEN} API
 // Example struct for 'Traffic by Hostname' API (https://techdocs.akamai.com/reporting/reference/delivery-traffic-current)
-// Desired response only needs the data[] element
+// In this case, desired response only needs select elements from the data[] array
 
 type HostnameTraffic struct {
 	Hostname                 string  `json:"hostname"`
@@ -47,7 +47,7 @@ type TrafficResponse struct {
 }
 
 func main() {
-	// Build request body or use map[string]interface{}
+	// Build request body (certain APIs take an empty {} body)
 	body := map[string]interface{}{
 		"dimensions": []string{"hostname"},
 		"metrics": []string{
@@ -63,6 +63,8 @@ func main() {
 
 	var respModel TrafficResponse
 
+	// Make the API request using this Akamai API helper
+	// Report start/end dates should be encoded ISO-8601 format
 	apiResp, err := akamaiapi.DoRequest(&akamaiapi.RequestConfig{
 		EdgercPath:    "/path/to/.edgerc",
 		Section:       "section name",
@@ -77,6 +79,7 @@ func main() {
 		panic(err)
 	}
 
+	// Validate API response
 	fmt.Println("Status codes:", apiResp.StatusCodes)
 	fmt.Println("Errors:", apiResp.Errors)
 
