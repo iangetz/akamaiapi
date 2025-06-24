@@ -47,7 +47,7 @@ type TrafficResponse struct {
 }
 
 func main() {
-	// Build request body (certain APIs take an empty {} body)
+	// Build request body
 	body := map[string]interface{}{
 		"dimensions": []string{"hostname"},
 		"metrics": []string{
@@ -60,17 +60,19 @@ func main() {
 		},
 		"limit": 5,
 	}
+	// For APIs that require an empty body ({}), simply use:
+	// body := map[string]interface{}{}
 
 	var respModel TrafficResponse
 
 	// Make the API request using this Akamai API helper
-	// Report start/end dates should be encoded ISO-8601 format
+	// Report start/end dates should be encoded ISO-8601 format (E.g. "2025-04-15T00%3A00%3A00Z")
 	apiResp, err := akamaiapi.DoRequest(&akamaiapi.RequestConfig{
-		EdgercPath:    "/path/to/.edgerc",
-		Section:       "section name",
+		EdgercPath:    "/path/to/your/.edgerc",
+		Section:       ".edgerc section name",
 		Path:          "/reporting-api/v2/reports/delivery/traffic/current/data",
 		Method:        "POST",
-		Params:        "accountSwitchKey=<abc123>&start=<YYYY-MM-DDTHH%3AMM%3ASSZ>&<end=YYYY-MM-DDTHH%3AMM%3ASSZ>",
+		Params:        "accountSwitchKey=<key>&start=<timestamp>&end=<timestamp>",
 		Body:          body,
 		Headers:       nil, // optional
 		ResponseModel: &respModel,
